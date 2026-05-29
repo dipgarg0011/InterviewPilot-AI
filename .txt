@@ -1,0 +1,3 @@
+NHKQ3anxOKtaGBEc
+
+mongodb+srv://dipgarg0011_db_user:NHKQ3anxOKtaGBEc@interview-ai-cluster.2d6jcke.mongodb.net/interview-ai
