@@ -1,13 +1,26 @@
-*{
-    margin: 0;
-    padding: 0;
-    box-sizing: border-box;
+@use "./styles/button";
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
 }
 
-html,body,#root{
-    height: 100%;
-    width: 100%;
-    background-color: #201e1e;
-    color:#d8cece;
-    font-family: 'Poppins', sans-serif;
+body {
+  font-family: Inter, sans-serif;
+  background: linear-gradient(
+    135deg,
+    #0f172a,
+    #172554,
+    #0f172a
+  );
+  color: white;
+}
+
+main {
+  min-height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 2rem;
 }

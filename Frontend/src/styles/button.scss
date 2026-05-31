@@ -1,0 +1,50 @@
+.button {
+  border: none;
+  outline: none;
+
+  padding: 0.9rem 1.5rem;
+  border-radius: 12px;
+
+  font-size: 1rem;
+  font-weight: 600;
+
+  cursor: pointer;
+
+  transition: all 0.3s ease;
+
+  &:active {
+    transform: scale(0.97);
+  }
+
+  &.primary-button {
+    background: linear-gradient(
+      135deg,
+      #6366f1,
+      #8b5cf6
+    );
+
+    color: white;
+
+    box-shadow: 0 10px 25px rgba(99, 102, 241, 0.35);
+
+    &:hover {
+      transform: translateY(-2px);
+
+      box-shadow: 0 15px 30px rgba(99, 102, 241, 0.45);
+    }
+  }
+
+  &.secondary-button {
+  padding: 0.45rem 0.9rem;
+  font-size: 0.9rem;
+
+  background: rgba(255, 255, 255, 0.9);
+  color: #111827;
+
+  border-radius: 8px;
+
+  &:hover {
+    background: white;
+  }
+}
+}
