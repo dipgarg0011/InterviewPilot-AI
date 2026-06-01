@@ -1,12 +1,25 @@
 import "./auth.form.scss";
 import { useNavigate } from "react-router-dom";
+import { useAuth } from "../Hooks/useAuth";
+import { useState } from "react";
+
 
 const Login = () => {
   const navigate = useNavigate();
 
-  const handleSubmit = (e) => {
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const {loading, handleLogin} = useAuth();
+
+  const handleSubmit = async (e) => {
     e.preventDefault();
+    await handleLogin({email, password});
+    navigate("/");
   };
+
+  if(loading){
+    return <div>Loading...</div>
+  }
 
   return (
     <main>
@@ -18,6 +31,7 @@ const Login = () => {
           <div className="input-group">
             <label htmlFor="email">Email</label>
             <input
+              onChange={(e)=>{setEmail(e.target.value)}}
               type="email"
               id="email"
               name="email"
@@ -28,6 +42,7 @@ const Login = () => {
           <div className="input-group">
             <label htmlFor="password">Password</label>
             <input
+              onChange={(e)=>{setPassword(e.target.value)}}
               type="password"
               id="password"
               name="password"
