@@ -11,7 +11,7 @@ async function registerUserController(req,res){
     const {username,email,password}= req.body
 
     if(!username || !email || !password){
-        res.status(400).json({
+        return res.status(400).json({
             message:'Username, email and password are required'
         })
     }
@@ -23,7 +23,7 @@ async function registerUserController(req,res){
         ]
     })
     if(isUserExist){
-        res.status(400).json({
+        return res.status(400).json({
             message:'Username or email already exists'
         })
     }
@@ -42,7 +42,7 @@ async function registerUserController(req,res){
         {expiresIn:'1d'}
     )
 
-    res.cookie('token',token)
+    res.cookie('token', token, { httpOnly: true, secure: false, sameSite: 'lax' })
 
     res.status(201).json({
         message:'User registered successfully',
@@ -63,19 +63,19 @@ async function loginUserController(req,res){
     const {email,password}= req.body
 
     if(!email || !password){
-        res.status(400).json({
+        return res.status(400).json({
             message:'Email and password are required'
         })
     }
     const user= await userModel.findOne({email})
     if(!user){
-        res.status(400).json({
+        return res.status(400).json({
             message:'Invalid email or password'
         })
     }
     const isPasswordValid = await bcrypt.compare(password,user.password)
     if(!isPasswordValid){
-        res.status(400).json({
+        return res.status(400).json({
             message:'Invalid email or password'
         })
     }
@@ -84,7 +84,7 @@ async function loginUserController(req,res){
         process.env.JWT_SECRET,
         {expiresIn:'1d'}
     )
-    res.cookie('token',token)
+    res.cookie('token', token, { httpOnly: true, secure: false, sameSite: 'lax' })
 
     res.status(200).json({
         message:'User logged in successfully',
@@ -104,10 +104,10 @@ async function loginUserController(req,res){
 async function logoutUserController(req,res){
     const token = req.cookies.token
     if(!token){
-        res.status(400).json({
-            message:'No token found'
-        })
+    return res.status(400).json({ message:'No token found' })
     }
+    
+
     await tokenBlacklistModel.create({token})
     res.clearCookie('token')
     res.status(200).json({

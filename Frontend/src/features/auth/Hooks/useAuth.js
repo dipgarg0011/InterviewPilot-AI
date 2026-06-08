@@ -1,6 +1,6 @@
-import { useContext, useEffect } from 'react';
+import { useContext } from 'react';  // ← remove useEffect
 import { AuthContext } from '../auth.context';
-import { login, register, logout, getMe } from '../services/auth.api';
+import { login, register, logout } from '../services/auth.api';
 
 export const useAuth = () => {
     const context = useContext(AuthContext);
@@ -42,19 +42,6 @@ export const useAuth = () => {
         }
     }
 
-    useEffect(() => {
-        const getSetUser = async () => {
-            try {
-                const data = await getMe();
-                if (data) setUser(data.user);
-            } catch (error) {
-                console.error("Failed to fetch user data:", error);
-            } finally {
-                setLoading(false);
-            }
-        };
-        getSetUser();
-    }, []);
-
+    // ✅ No useEffect here anymore
     return { user, loading, handleLogin, handleRegister, handleLogout };
 }

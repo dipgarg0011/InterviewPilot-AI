@@ -2,20 +2,21 @@ const {Router} = require('express');
 const authRouter = Router()
 const authController = require('../controllers/auth.controller')
 const authMiddleware = require('../middleware/auth.middleware')
+const { validate, registerSchema, loginSchema } = require("../validators/auth.validator");
 
 /**
  * @route POST /api/auth/register
  * @desc Register a new user
  * @access Public
  */
-authRouter.post("/register",authController.registerUserController)
+authRouter.post("/register", validate(registerSchema), authController.registerUserController)
 
 /**
  * @route POST /api/auth/login
  * @desc Login a user
  * @access Public
  */
-authRouter.post("/login",authController.loginUserController)
+authRouter.post("/login", validate(loginSchema), authController.loginUserController)
 
 /**
  * @route GET /api/auth/logout

@@ -1,40 +1,46 @@
-import React, { useState, useRef } from "react";
-import "../styles/home.scss";
-import { useInterview } from "../hooks/useInterview";
+import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
+import { useInterview } from "../hooks/useInterview";
+import "../styles/home.scss";
 
 const Home = () => {
   const [jobDescription, setJobDescription] = useState("");
+  const [resume, setResume] = useState(null);
   const [selfDescription, setSelfDescription] = useState("");
-  const [resumeFile, setResumeFile] = useState(null);
-  const fileInputRef = useRef(null);
+  const [error, setError] = useState("");
 
-  const { generateReport, loading } = useInterview();
   const navigate = useNavigate();
+  const { generateReport, loading } = useInterview();
 
-  const handleSubmit = async () => {
-    if (!jobDescription.trim() || !selfDescription.trim() || !resumeFile) {
-      alert("Please fill in all fields and upload your resume.");
+  const handleGenerateReport = async (e) => {
+    e.preventDefault();
+    setError("");
+
+    if (!jobDescription || !resume || !selfDescription) {
+      setError("All fields are required");
       return;
     }
 
-    const report = await generateReport({ jobDescription, selfDescription, resumeFile });
+    const report = await generateReport({
+      jobDescription,
+      selfDescription,
+      resumeFile: resume,
+    });
 
-    if (report && report._id) {
+    if (report?._id) {
       navigate(`/interview/${report._id}`);
+    } else {
+      setError("Failed to generate report. Please try again.");
     }
   };
 
   return (
     <div className="page">
-
       <section className="hero">
         <div className="badge">
           AI Powered Interview Preparation
         </div>
-
         <h1>Create Your Custom Interview Prep Plan</h1>
-
         <p>
           Upload your resume, paste the job description and get a
           personalized interview roadmap instantly.
@@ -42,13 +48,11 @@ const Home = () => {
       </section>
 
       <main className="home">
-
         <div className="leftArea">
           <div className="section-header">
             <h2>Job Description</h2>
             <p>Paste the company job description</p>
           </div>
-
           <textarea
             id="jobDescription"
             placeholder="Enter job description here..."
@@ -60,31 +64,23 @@ const Home = () => {
         <div className="divider"></div>
 
         <div className="rightArea">
-
           <div className="section-header">
             <h2>Candidate Profile</h2>
             <p>Upload resume and describe yourself</p>
           </div>
 
           <div className="upload-box">
-            <label htmlFor="resume">
-              📄 {resumeFile ? resumeFile.name : "Upload Resume"}
-            </label>
-
+            <label htmlFor="resume">📄 Upload Resume</label>
             <input
-              ref={fileInputRef}
               type="file"
               id="resume"
               accept=".pdf,.doc,.docx"
-              onChange={(e) => setResumeFile(e.target.files[0] || null)}
+              onChange={(e) => setResume(e.target.files?.[0])}
             />
           </div>
 
           <div className="input-group">
-            <label htmlFor="selfDescription">
-              Self Description
-            </label>
-
+            <label htmlFor="selfDescription">Self Description</label>
             <textarea
               id="selfDescription"
               placeholder="Tell us about yourself..."
@@ -95,16 +91,15 @@ const Home = () => {
 
           <button
             className="generate-btn"
-            onClick={handleSubmit}
+            onClick={handleGenerateReport}
             disabled={loading}
           >
             {loading ? "Generating..." : "Generate Interview Report"}
           </button>
 
+          {error && <p className="error-message" style={{ color: "red" }}>{error}</p>}
         </div>
-
       </main>
-
     </div>
   );
 };
