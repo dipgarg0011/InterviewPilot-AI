@@ -40,5 +40,10 @@ interviewRouter.get("/report/:interviewId", authMiddleware.authUser, interviewco
  */
 interviewRouter.post("/resume/pdf/:interviewReportId", authMiddleware.authUser, interviewcontroller.generateResumePdf);
 
+// DELETE a report (owner only)
+interviewRouter.delete("/:interviewId", authMiddleware.authUser, interviewcontroller.deleteReport);
+
+// PATCH/edit a report's description (owner only)
+interviewRouter.patch("/:interviewId", authMiddleware.authUser, interviewcontroller.updateReport);
 
 module.exports = interviewRouter;

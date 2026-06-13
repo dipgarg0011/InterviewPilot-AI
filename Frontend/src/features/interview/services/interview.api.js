@@ -43,3 +43,16 @@ export const generateResumePdf = async ({ interviewReportId }) => {
   );
   return response.data;
 };
+
+export const deleteInterviewReport = async (interviewId) => {
+  const response = await api.delete(`/api/interview/${interviewId}`);
+  return response.data;
+};
+
+export const updateInterviewReport = async (interviewId, { jobdescription, selfdescription }) => {
+  const response = await api.patch(`/api/interview/${interviewId}`, {
+    jobdescription,
+    selfdescription,
+  });
+  return response.data;
+};

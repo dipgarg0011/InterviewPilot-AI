@@ -286,10 +286,80 @@ async function getInterviewReportById(req, res) {
     });
 }
 
+/**
+ * @desc Delete an interview report by ID (only owner can delete)
+ */
+async function deleteReport(req, res) {
+    try {
+        const { interviewId } = req.params;
+
+        if (!req.user || !req.user.id) {
+            return res.status(401).json({ success: false, message: "Unauthorized" });
+        }
+
+        const report = await InterviewReportModel.findById(interviewId);
+
+        if (!report) {
+            return res.status(404).json({ success: false, message: "Report not found" });
+        }
+
+        // ✅ Only owner can delete
+        if (report.user.toString() !== req.user.id.toString()) {
+            return res.status(403).json({ success: false, message: "Access denied" });
+        }
+
+        await InterviewReportModel.findByIdAndDelete(interviewId);
+
+        return res.status(200).json({ success: true, message: "Report deleted" });
+
+    } catch (error) {
+        console.error("deleteReport error:", error);
+        return res.status(500).json({ success: false, message: error.message });
+    }
+}
+
+/**
+ * @desc Update jobdescription label/note of a report (only owner)
+ */
+async function updateReport(req, res) {
+    try {
+        const { interviewId } = req.params;
+        const { jobdescription, selfdescription } = req.body;
+
+        if (!req.user || !req.user.id) {
+            return res.status(401).json({ success: false, message: "Unauthorized" });
+        }
+
+        const report = await InterviewReportModel.findById(interviewId);
+
+        if (!report) {
+            return res.status(404).json({ success: false, message: "Report not found" });
+        }
+
+        // ✅ Only owner can edit
+        if (report.user.toString() !== req.user.id.toString()) {
+            return res.status(403).json({ success: false, message: "Access denied" });
+        }
+
+        if (jobdescription !== undefined) report.jobdescription = jobdescription;
+        if (selfdescription !== undefined) report.selfdescription = selfdescription;
+
+        await report.save();
+
+        return res.status(200).json({ success: true, interviewReport: report });
+
+    } catch (error) {
+        console.error("updateReport error:", error);
+        return res.status(500).json({ success: false, message: error.message });
+    }
+}
+
 module.exports = {
     generateReport,
     getReportById,
     getAllReports,
     generateResumePdf,
-    getInterviewReportById
+    getInterviewReportById,
+    updateReport,
+    deleteReport
 };

@@ -6,6 +6,7 @@ import {
 } from "../services/interview.api";
 import { useContext } from "react";
 import { InterviewContext } from "../interview.context";
+import { deleteInterviewReport, updateInterviewReport } from "../services/interview.api";
 
 export const useInterview = () => {
   const context = useContext(InterviewContext);
@@ -79,6 +80,33 @@ export const useInterview = () => {
       setLoading(false);
     }
   };
+  const deleteReport = async (interviewId) => {
+  setLoading(true);
+  try {
+    await deleteInterviewReport(interviewId);
+    // Remove from local state immediately
+    setReports((prev) => prev.filter((r) => r._id !== interviewId));
+  } catch (error) {
+    console.error("deleteReport error:", error);
+  } finally {
+    setLoading(false);
+  }
+};
 
-  return { loading, report, reports, generateReport, getReportById, getReports, getResumePdf };
+const editReport = async (interviewId, updates) => {
+  setLoading(true);
+  try {
+    const response = await updateInterviewReport(interviewId, updates);
+    // Update in local state
+    setReports((prev) =>
+      prev.map((r) => (r._id === interviewId ? response.interviewReport : r))
+    );
+  } catch (error) {
+    console.error("editReport error:", error);
+  } finally {
+    setLoading(false);
+  }
+};
+
+  return { loading, report, reports, generateReport, getReportById, getReports, getResumePdf, editReport,deleteReport };
 };
