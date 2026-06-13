@@ -71,8 +71,8 @@ The platform automatically identifies skill gaps, generates relevant interview q
 
 
 ### History Page
+<img width="956" height="500" alt="image" src="https://github.com/user-attachments/assets/d46fdbef-a897-48cb-aa22-2a570c12badc" />
 
-<img width="1012" height="531" alt="image" src="https://github.com/user-attachments/assets/84314577-0af9-49e0-9c59-abe0c9abc579" />
 
 
 ---
