@@ -220,7 +220,6 @@ GET  /api/interview/download/:interviewReportId
 
 **Dipanshu Garg**
 
-* LinkedIn: https://linkedin.com/in/your-profile
 * GitHub: https://github.com/dipgarg0011
 
 ---
